@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { 
   LayoutDashboard, 
   ShoppingBag, 
@@ -10,7 +11,6 @@ import {
   ShieldCheck, 
   FileText, 
   Layers, 
-  Sparkles,
   ChevronRight,
   TrendingUp,
   Globe
@@ -168,19 +168,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </nav>
       </div>
 
-      {/* Switch to Marketing Site Shortcut Button */}
+      {/* Manager Profile Footer Widget */}
       <div className="p-4 border-t border-stone-800 space-y-3">
-        <button
-          onClick={() => setActiveTab('landing')}
-          className="w-full flex items-center justify-center gap-2 bg-stone-900 hover:bg-stone-800 text-stone-300 hover:text-white py-2.5 px-3 rounded-xl border border-stone-800 text-xs font-bold transition-colors cursor-pointer"
-        >
-          <Globe className="w-4 h-4 text-amber-400" />
-          <span>Public Marketing Site</span>
-        </button>
-
-        <div className="flex items-center gap-2.5 text-[11px] text-stone-500 px-1">
-          <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-          <span>GarmentsOS Enterprise v2.6</span>
+        <div className="flex items-center justify-between p-2 rounded-xl bg-stone-900 border border-stone-800/80">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-full overflow-hidden relative border border-stone-700 bg-stone-800 shrink-0">
+              <Image src="/hero-manager.png" alt="Manager Profile" width={32} height={32} className="w-full h-full object-cover" />
+            </div>
+            <div>
+              <h4 className="text-xs font-bold text-white">Manager</h4>
+              <p className="text-[10px] text-stone-400">Factory Line A</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setActiveTab('landing')}
+            className="p-1.5 rounded-lg text-stone-400 hover:text-white hover:bg-stone-800 transition-colors cursor-pointer"
+            title="Switch to Public Marketing Site"
+          >
+            <Globe className="w-4 h-4 text-amber-500" />
+          </button>
         </div>
       </div>
     </aside>

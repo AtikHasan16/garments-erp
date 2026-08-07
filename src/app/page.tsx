@@ -124,6 +124,8 @@ export default function Home() {
                 lines={lines}
                 inventory={inventory}
                 audits={INITIAL_QUALITY_AUDITS}
+                onNavigateToTab={(tab) => setActiveModule(tab)}
+                onOpenNewOrderModal={() => setIsNewOrderModalOpen(true)}
               />
             )}
 
