@@ -9,19 +9,8 @@ import {
   Globe,
   ChevronRight
 } from 'lucide-react';
-import { ActiveModule } from '../../types/erp';
 
-interface HeaderProps {
-  activeTab: ActiveModule;
-  onOpenNewOrderModal: () => void;
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  selectedFloor: string;
-  setSelectedFloor: (floor: string) => void;
-  onNavigateToLanding: () => void;
-}
-
-export const Header: React.FC<HeaderProps> = ({
+export const Header = ({
   activeTab,
   onOpenNewOrderModal,
   searchQuery,
@@ -30,7 +19,7 @@ export const Header: React.FC<HeaderProps> = ({
   setSelectedFloor,
   onNavigateToLanding,
 }) => {
-  const moduleNames: Record<ActiveModule, string> = {
+  const moduleNames = {
     landing: 'Marketing Portal',
     overview: 'Executive Pulse & Analytics',
     orders: 'Merchandise Orders & Style Library',
@@ -47,7 +36,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="flex items-center gap-2 text-xs font-semibold">
         <button 
           onClick={onNavigateToLanding}
-          className="text-stone-400 hover:text-white transition-colors flex items-center gap-1"
+          className="text-stone-400 hover:text-white transition-colors flex items-center gap-1 cursor-pointer"
         >
           <Globe className="w-3.5 h-3.5 text-amber-500" />
           <span>GarmentsOS</span>
@@ -111,7 +100,7 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Public View Link */}
         <button
           onClick={onNavigateToLanding}
-          className="hidden md:flex items-center gap-1 text-xs font-semibold text-stone-400 hover:text-stone-100 bg-stone-800 px-3 py-2 rounded-xl border border-stone-700 transition-colors"
+          className="hidden md:flex items-center gap-1 text-xs font-semibold text-stone-400 hover:text-stone-100 bg-stone-800 px-3 py-2 rounded-xl border border-stone-700 transition-colors cursor-pointer"
         >
           <span>Landing Page</span>
         </button>

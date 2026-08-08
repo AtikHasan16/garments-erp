@@ -15,16 +15,8 @@ import {
   TrendingUp,
   Globe
 } from 'lucide-react';
-import { ActiveModule } from '../../types/erp';
 
-interface SidebarProps {
-  activeTab: ActiveModule;
-  setActiveTab: (tab: ActiveModule) => void;
-  totalOrdersCount: number;
-  lowStockAlertsCount: number;
-}
-
-export const Sidebar: React.FC<SidebarProps> = ({
+export const Sidebar = ({
   activeTab,
   setActiveTab,
   totalOrdersCount,
@@ -141,7 +133,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id as ActiveModule)}
+                onClick={() => setActiveTab(item.id)}
                 className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all group ${
                   isActive
                     ? 'bg-amber-600/20 text-amber-300 border border-amber-500/40 shadow-sm'

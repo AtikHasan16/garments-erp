@@ -1,41 +1,34 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Image from "next/image";
-import {
-  Layers,
-  ArrowRight,
-  Play,
-  Box,
-  Factory,
-  Truck,
-  ShoppingBag,
-  TrendingUp,
-  User,
-  CheckCircle2,
-  X,
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { 
+  Layers, 
+  ArrowRight, 
+  Play, 
+  Box, 
+  Factory, 
+  Truck, 
+  ShoppingBag, 
+  TrendingUp, 
+  User, 
+  CheckCircle2, 
+  X, 
   Sparkles,
-  ChevronRight,
-} from "lucide-react";
-import { ActiveModule } from "../../types/erp";
+  ChevronRight
+} from 'lucide-react';
 
-interface MarketingLandingPageProps {
-  onNavigateToErp: (module: ActiveModule) => void;
-}
-
-export const MarketingLandingPage: React.FC<MarketingLandingPageProps> = ({
-  onNavigateToErp,
-}) => {
+export const MarketingLandingPage = ({ onNavigateToErp }) => {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    factoryName: "",
-    monthlyCapacity: "50,000 - 200,000 pcs",
+    name: '',
+    email: '',
+    factoryName: '',
+    monthlyCapacity: '50,000 - 200,000 pcs',
   });
 
-  const handleDemoSubmit = (e: React.FormEvent) => {
+  const handleDemoSubmit = (e) => {
     e.preventDefault();
     setIsSubmitted(true);
   };
@@ -58,8 +51,8 @@ export const MarketingLandingPage: React.FC<MarketingLandingPageProps> = ({
               GarmentsOS IoT Line Integration now live for Garment Manufacturers
             </span>
           </div>
-          <button
-            onClick={() => onNavigateToErp("overview")}
+          <button 
+            onClick={() => onNavigateToErp('overview')}
             className="flex items-center gap-1 text-amber-400 hover:text-amber-300 font-medium transition-colors cursor-pointer"
           >
             <span>Launch Live ERP Sandbox</span>
@@ -72,8 +65,8 @@ export const MarketingLandingPage: React.FC<MarketingLandingPageProps> = ({
       <header className="sticky top-0 z-40 bg-[#fafaf8]/90 backdrop-blur-md border-b border-stone-200/80 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo */}
-          <div
-            onClick={() => onNavigateToErp("landing")}
+          <div 
+            onClick={() => onNavigateToErp('landing')}
             className="flex items-center gap-2.5 cursor-pointer group"
           >
             <div className="w-8 h-8 rounded-lg bg-stone-900 text-white flex items-center justify-center font-bold shadow-sm group-hover:bg-amber-600 transition-colors">
@@ -115,15 +108,22 @@ export const MarketingLandingPage: React.FC<MarketingLandingPageProps> = ({
           {/* Header Action Buttons */}
           <div className="flex items-center gap-3">
             <button
-              onClick={() => onNavigateToErp("overview")}
-              className="bg-[#b45309] hover:bg-[#92400e] text-white px-5 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition-all shadow-sm hover:shadow-md cursor-pointer flex items-center gap-1.5"
+              onClick={() => onNavigateToErp('overview')}
+              className="hidden sm:flex items-center gap-1.5 text-xs font-bold text-stone-900 bg-stone-200/80 hover:bg-stone-300 border border-stone-300 px-3.5 py-2 rounded-full transition-all cursor-pointer shadow-xs"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber-200" />
-              <span>REQUEST DEMO (ERP DASHBOARD)</span>
+              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+              <span>ERP Dashboard</span>
             </button>
 
             <button
-              onClick={() => onNavigateToErp("overview")}
+              onClick={() => setIsDemoModalOpen(true)}
+              className="bg-[#b45309] hover:bg-[#92400e] text-white px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition-all shadow-sm hover:shadow-md cursor-pointer"
+            >
+              Request Demo
+            </button>
+
+            <button
+              onClick={() => onNavigateToErp('overview')}
               className="w-8 h-8 rounded-full bg-stone-200/70 border border-stone-300 flex items-center justify-center text-stone-700 hover:bg-stone-300 transition-colors cursor-pointer"
               title="Go to Dashboard Layout"
             >
@@ -146,9 +146,9 @@ export const MarketingLandingPage: React.FC<MarketingLandingPageProps> = ({
 
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-stone-950 tracking-tight leading-[1.1]">
-              The Operating System for{" "}
-              <span className="text-[#b45309] block sm:inline">Modern</span>{" "}
-              <span className="text-[#b45309] block sm:inline">Garment</span>{" "}
+              The Operating System for{' '}
+              <span className="text-[#b45309] block sm:inline">Modern</span>{' '}
+              <span className="text-[#b45309] block sm:inline">Garment</span>{' '}
               <span className="text-[#b45309] block">Manufacturing</span>
             </h1>
 
@@ -162,19 +162,19 @@ export const MarketingLandingPage: React.FC<MarketingLandingPageProps> = ({
             {/* CTA Buttons */}
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <button
-                onClick={() => onNavigateToErp("overview")}
+                onClick={() => setIsDemoModalOpen(true)}
                 className="bg-black hover:bg-stone-800 text-white px-7 py-3.5 rounded-full text-xs font-bold tracking-wider uppercase flex items-center gap-2 transition-all shadow-md hover:shadow-lg cursor-pointer"
               >
-                <span>Go to ERP Dashboard</span>
+                <span>Book a Demo</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
               <button
-                onClick={() => onNavigateToErp("overview")}
+                onClick={() => onNavigateToErp('overview')}
                 className="bg-stone-200/80 hover:bg-stone-300 text-stone-900 px-6 py-3.5 rounded-full text-xs font-bold tracking-wider uppercase flex items-center gap-2 transition-colors cursor-pointer"
               >
                 <Play className="w-3.5 h-3.5 text-stone-800 fill-stone-800" />
-                <span>Launch Dashboard</span>
+                <span>Launch ERP Dashboard</span>
               </button>
             </div>
 
@@ -192,10 +192,10 @@ export const MarketingLandingPage: React.FC<MarketingLandingPageProps> = ({
                 </div>
               </div>
               <p className="text-xs font-semibold text-stone-600">
-                Trusted by{" "}
+                Trusted by{' '}
                 <span className="text-stone-900 font-extrabold">
                   500+ factories
-                </span>{" "}
+                </span>{' '}
                 worldwide
               </p>
             </div>
@@ -255,7 +255,7 @@ export const MarketingLandingPage: React.FC<MarketingLandingPageProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Module 1: Fabric & Trim Inventory */}
             <div
-              onClick={() => onNavigateToErp("inventory")}
+              onClick={() => onNavigateToErp('inventory')}
               className="bg-white p-7 rounded-2xl border border-stone-200/90 shadow-sm hover:shadow-md hover:border-amber-500/40 transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-4">
@@ -278,7 +278,7 @@ export const MarketingLandingPage: React.FC<MarketingLandingPageProps> = ({
 
             {/* Module 2: Production WIP */}
             <div
-              onClick={() => onNavigateToErp("production")}
+              onClick={() => onNavigateToErp('production')}
               className="bg-white p-7 rounded-2xl border border-stone-200/90 shadow-sm hover:shadow-md hover:border-amber-500/40 transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-4">
@@ -301,7 +301,7 @@ export const MarketingLandingPage: React.FC<MarketingLandingPageProps> = ({
 
             {/* Module 3: Delivery Challans */}
             <div
-              onClick={() => onNavigateToErp("logistics")}
+              onClick={() => onNavigateToErp('logistics')}
               className="bg-white p-7 rounded-2xl border border-stone-200/90 shadow-sm hover:shadow-md hover:border-amber-500/40 transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-4">
@@ -327,7 +327,7 @@ export const MarketingLandingPage: React.FC<MarketingLandingPageProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {/* Module 4: Order Management System (Span 7) */}
             <div
-              onClick={() => onNavigateToErp("orders")}
+              onClick={() => onNavigateToErp('orders')}
               className="md:col-span-7 bg-white p-7 rounded-2xl border border-stone-200/90 shadow-sm hover:shadow-md hover:border-amber-500/40 transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
@@ -368,7 +368,7 @@ export const MarketingLandingPage: React.FC<MarketingLandingPageProps> = ({
 
             {/* Module 5: Analytics & Reports (Span 5) */}
             <div
-              onClick={() => onNavigateToErp("overview")}
+              onClick={() => onNavigateToErp('overview')}
               className="md:col-span-5 bg-white p-7 rounded-2xl border border-stone-200/90 shadow-sm hover:shadow-md hover:border-amber-500/40 transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-4">
@@ -409,13 +409,13 @@ export const MarketingLandingPage: React.FC<MarketingLandingPageProps> = ({
 
           <div className="flex flex-wrap justify-center items-center gap-4 pt-2">
             <button
-              onClick={() => onNavigateToErp("overview")}
+              onClick={() => onNavigateToErp('overview')}
               className="bg-[#b45309] hover:bg-[#92400e] text-white px-7 py-3.5 rounded-full text-xs font-bold tracking-wider uppercase transition-all shadow-lg hover:shadow-amber-900/30 cursor-pointer"
             >
               Open ERP Dashboard
             </button>
             <button
-              onClick={() => onNavigateToErp("overview")}
+              onClick={() => onNavigateToErp('overview')}
               className="border border-stone-700 bg-stone-900 hover:bg-stone-800 text-stone-200 px-7 py-3.5 rounded-full text-xs font-bold tracking-wider uppercase transition-colors cursor-pointer"
             >
               Launch Factory Dashboard
@@ -566,7 +566,7 @@ export const MarketingLandingPage: React.FC<MarketingLandingPageProps> = ({
 
                   <button
                     type="submit"
-                    className="w-full bg-[#b45309] hover:bg-[#92400e] text-white py-3 rounded-xl text-xs font-bold tracking-wider uppercase transition-colors shadow-md mt-2"
+                    className="w-full bg-[#b45309] hover:bg-[#92400e] text-white py-3 rounded-xl text-xs font-bold tracking-wider uppercase transition-colors shadow-md mt-2 cursor-pointer"
                   >
                     Submit Demo Request
                   </button>
@@ -582,14 +582,14 @@ export const MarketingLandingPage: React.FC<MarketingLandingPageProps> = ({
                     Request Received!
                   </h3>
                   <p className="text-xs text-stone-600 max-w-sm mx-auto">
-                    Thank you{" "}
+                    Thank you{' '}
                     <span className="font-bold text-stone-900">
                       {formData.name}
                     </span>
-                    . Our technical solution team for{" "}
+                    . Our technical solution team for{' '}
                     <span className="font-bold text-stone-900">
-                      {formData.factoryName || "your factory"}
-                    </span>{" "}
+                      {formData.factoryName || 'your factory'}
+                    </span>{' '}
                     will reach out within 2 hours.
                   </p>
                 </div>
@@ -598,7 +598,7 @@ export const MarketingLandingPage: React.FC<MarketingLandingPageProps> = ({
                   <button
                     onClick={() => {
                       closeDemoModal();
-                      onNavigateToErp("overview");
+                      onNavigateToErp('overview');
                     }}
                     className="w-full bg-stone-950 hover:bg-stone-800 text-white py-3 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 transition-colors cursor-pointer"
                   >
