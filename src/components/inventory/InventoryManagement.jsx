@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useERP } from '../../context/ERPContext';
 import { 
   Package, 
   Search, 
@@ -8,7 +9,8 @@ import {
   Plus
 } from 'lucide-react';
 
-export const InventoryManagement = ({ inventory }) => {
+export const InventoryManagement = () => {
+  const { inventory, openInventoryModal } = useERP();
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -37,6 +39,9 @@ export const InventoryManagement = ({ inventory }) => {
     }
   };
 
+  const lowStockCount = inventory.filter(i => i.status === 'Low Stock' || i.status === 'Critical').length;
+  const totalValue = inventory.reduce((sum, item) => sum + (item.quantity * item.unitCost), 0);
+
   return (
     <div className="space-y-6 pb-12 bg-[#f8fafc] text-stone-900 min-h-full font-sans">
       {/* Header Bar */}
@@ -44,12 +49,15 @@ export const InventoryManagement = ({ inventory }) => {
         <div>
           <h2 className="text-xl font-extrabold text-stone-950 tracking-tight flex items-center gap-2">
             <Package className="w-5 h-5 text-amber-600" />
-            Fabric & Raw Material Inventory Ledger
+            Fabric & Raw Material Inventory Ledger (MongoDB Atlas Live)
           </h2>
           <p className="text-xs text-stone-500 mt-0.5">Track fabric rolls, yarn cones, and trim stock levels with shade lot batch history</p>
         </div>
 
-        <button className="self-start sm:self-auto bg-black hover:bg-stone-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer">
+        <button 
+          onClick={openInventoryModal}
+          className="self-start sm:self-auto bg-black hover:bg-stone-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+        >
           <Plus className="w-4 h-4" />
           <span>Log Fabric Arrival</span>
         </button>
@@ -58,27 +66,27 @@ export const InventoryManagement = ({ inventory }) => {
       {/* Top Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm flex flex-col justify-between">
-          <span className="text-[11px] font-extrabold text-stone-500 uppercase tracking-wider">TOTAL FABRIC ROLLS</span>
-          <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight mt-2">14,500 <span className="text-sm font-bold text-stone-500">Yds</span></h3>
-          <p className="text-xs text-stone-500 mt-1 font-semibold">Indigo Denim & Jersey Knit</p>
-        </div>
-
-        <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm flex flex-col justify-between">
-          <span className="text-[11px] font-extrabold text-stone-500 uppercase tracking-wider">YARN IN-HOUSE</span>
-          <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight mt-2">2,800 <span className="text-sm font-bold text-stone-500">Kgs</span></h3>
-          <p className="text-xs text-stone-500 mt-1 font-semibold">30/1 Combed Organic</p>
+          <span className="text-[11px] font-extrabold text-stone-500 uppercase tracking-wider">TOTAL INVENTORY ITEMS</span>
+          <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight mt-2">{inventory.length} <span className="text-sm font-bold text-stone-500">Items</span></h3>
+          <p className="text-xs text-stone-500 mt-1 font-semibold">Fabric & Accessories</p>
         </div>
 
         <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm flex flex-col justify-between">
           <span className="text-[11px] font-extrabold text-stone-500 uppercase tracking-wider">STOCK ALERTS</span>
-          <h3 className="text-3xl font-extrabold text-amber-700 tracking-tight mt-2">2 <span className="text-sm font-bold text-stone-500">Low Items</span></h3>
-          <p className="text-xs text-amber-800 mt-1 font-semibold">Yarn & Zipper Reorder Level</p>
+          <h3 className="text-3xl font-extrabold text-amber-700 tracking-tight mt-2">{lowStockCount} <span className="text-sm font-bold text-stone-500">Low Stock</span></h3>
+          <p className="text-xs text-amber-800 mt-1 font-semibold">Reorder Level Triggered</p>
+        </div>
+
+        <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm flex flex-col justify-between">
+          <span className="text-[11px] font-extrabold text-stone-500 uppercase tracking-wider">CATEGORIES</span>
+          <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight mt-2">{categories.length} <span className="text-sm font-bold text-stone-500">Types</span></h3>
+          <p className="text-xs text-stone-500 mt-1 font-semibold">Woven, Knit & Trims</p>
         </div>
 
         <div className="p-5 rounded-2xl bg-black text-white shadow-md flex flex-col justify-between">
           <span className="text-[11px] font-extrabold text-stone-300 uppercase tracking-wider">RAW INVENTORY VALUE</span>
-          <h3 className="text-3xl font-extrabold text-white tracking-tight mt-2">$184,200</h3>
-          <p className="text-xs text-stone-400 mt-1 font-semibold">5 Active Store Racks</p>
+          <h3 className="text-3xl font-extrabold text-white tracking-tight mt-2">${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
+          <p className="text-xs text-stone-400 mt-1 font-semibold">MongoDB Atlas Collection</p>
         </div>
       </div>
 
@@ -130,7 +138,7 @@ export const InventoryManagement = ({ inventory }) => {
             </thead>
             <tbody className="divide-y divide-stone-200 font-medium text-stone-800">
               {filteredItems.map((item) => (
-                <tr key={item.id} className="hover:bg-stone-50 transition-colors">
+                <tr key={item._id || item.id} className="hover:bg-stone-50 transition-colors">
                   <td className="py-4 px-4">
                     <div className="font-bold text-stone-950">{item.name}</div>
                     <div className="text-[11px] text-stone-500 font-mono flex items-center gap-2 mt-0.5">
@@ -144,11 +152,11 @@ export const InventoryManagement = ({ inventory }) => {
                   <td className="py-4 px-4 font-semibold text-stone-700">{item.category}</td>
                   <td className="py-4 px-4 font-mono">
                     <div className="font-bold text-stone-950 text-sm">
-                      {item.quantity.toLocaleString()} {item.unit}
+                      {item.quantity?.toLocaleString()} {item.unit}
                     </div>
-                    <div className="text-[10px] text-stone-500">Cost: ${item.unitCost.toFixed(2)}</div>
+                    <div className="text-[10px] text-stone-500">Cost: ${item.unitCost?.toFixed(2)}</div>
                   </td>
-                  <td className="py-4 px-4 font-mono text-stone-600">{item.reorderLevel.toLocaleString()} {item.unit}</td>
+                  <td className="py-4 px-4 font-mono text-stone-600">{item.reorderLevel?.toLocaleString()} {item.unit}</td>
                   <td className="py-4 px-4 text-stone-700">{item.supplier}</td>
                   <td className="py-4 px-4 text-stone-600 font-mono">{item.location}</td>
                   <td className="py-4 px-4">

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useERP } from '../../context/ERPContext';
 import { 
   Truck, 
   Printer,
@@ -8,7 +9,8 @@ import {
   X
 } from 'lucide-react';
 
-export const DeliveryChallanManagement = ({ challans }) => {
+export const DeliveryChallanManagement = () => {
+  const { challans, openChallanModal } = useERP();
   const [selectedChallan, setSelectedChallan] = useState(null);
 
   const getStatusBadge = (status) => {
@@ -22,6 +24,9 @@ export const DeliveryChallanManagement = ({ challans }) => {
     }
   };
 
+  const totalCartons = challans.reduce((sum, c) => sum + (c.totalCartons || 0), 0);
+  const totalQty = challans.reduce((sum, c) => sum + (c.totalQuantity || 0), 0);
+
   return (
     <div className="space-y-6 pb-12 bg-[#f8fafc] text-stone-900 min-h-full font-sans">
       {/* Header Bar */}
@@ -29,12 +34,15 @@ export const DeliveryChallanManagement = ({ challans }) => {
         <div>
           <h2 className="text-xl font-extrabold text-stone-950 tracking-tight flex items-center gap-2">
             <Truck className="w-5 h-5 text-amber-600" />
-            Delivery Challan & Factory Gate Pass Logistics Hub
+            Delivery Challan & Gate Pass Hub (MongoDB Atlas Live)
           </h2>
           <p className="text-xs text-stone-500 mt-0.5">Generate outward gate passes, track delivery vehicles, and inspect carton packing lists</p>
         </div>
 
-        <button className="self-start sm:self-auto bg-black hover:bg-stone-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer">
+        <button 
+          onClick={openChallanModal}
+          className="self-start sm:self-auto bg-black hover:bg-stone-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+        >
           <Plus className="w-4 h-4" />
           <span>Generate New Challan</span>
         </button>
@@ -44,26 +52,26 @@ export const DeliveryChallanManagement = ({ challans }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm flex flex-col justify-between">
           <span className="text-[11px] font-extrabold text-stone-500 uppercase tracking-wider">ACTIVE GATE PASSES</span>
-          <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight mt-2">3 <span className="text-sm font-bold text-stone-500">Passes</span></h3>
+          <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight mt-2">{challans.length} <span className="text-sm font-bold text-stone-500">Passes</span></h3>
           <p className="text-xs text-stone-500 mt-1 font-semibold">Port ICD & Air Cargo</p>
         </div>
 
         <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm flex flex-col justify-between">
           <span className="text-[11px] font-extrabold text-stone-500 uppercase tracking-wider">CARTONS DISPATCHED</span>
-          <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight mt-2">1,270 <span className="text-sm font-bold text-stone-500">Cartons</span></h3>
+          <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight mt-2">{totalCartons.toLocaleString()} <span className="text-sm font-bold text-stone-500">Cartons</span></h3>
           <p className="text-xs text-stone-500 mt-1 font-semibold">Export Grade Sealed</p>
         </div>
 
         <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm flex flex-col justify-between">
           <span className="text-[11px] font-extrabold text-stone-500 uppercase tracking-wider">TOTAL SHIPMENT UNITS</span>
-          <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight mt-2">33,400 <span className="text-sm font-bold text-stone-500">Pcs</span></h3>
+          <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight mt-2">{totalQty.toLocaleString()} <span className="text-sm font-bold text-stone-500">Pcs</span></h3>
           <p className="text-xs text-stone-500 mt-1 font-semibold">Levi&apos;s, ZARA & Tommy</p>
         </div>
 
         <div className="p-5 rounded-2xl bg-black text-white shadow-md flex flex-col justify-between">
           <span className="text-[11px] font-extrabold text-stone-300 uppercase tracking-wider">LOGISTICS PARTNER</span>
           <h3 className="text-3xl font-extrabold text-white tracking-tight mt-2">DHL & Port ICD</h3>
-          <p className="text-xs text-stone-400 mt-1 font-semibold">GPS Truck Fleet Active</p>
+          <p className="text-xs text-stone-400 mt-1 font-semibold">MongoDB Atlas Records</p>
         </div>
       </div>
 
@@ -84,7 +92,7 @@ export const DeliveryChallanManagement = ({ challans }) => {
             </thead>
             <tbody className="divide-y divide-stone-200 font-medium text-stone-800">
               {challans.map((chal) => (
-                <tr key={chal.id} className="hover:bg-stone-50 transition-colors">
+                <tr key={chal._id || chal.id} className="hover:bg-stone-50 transition-colors">
                   <td className="py-4 px-4 font-mono">
                     <div className="font-bold text-amber-700">{chal.challanNo}</div>
                     <div className="text-[11px] text-stone-500">Gate Pass: {chal.gatePassNo}</div>
@@ -94,7 +102,7 @@ export const DeliveryChallanManagement = ({ challans }) => {
                     <div className="text-[11px] text-stone-500 font-mono">{chal.poNumber} &bull; {chal.styleCode}</div>
                   </td>
                   <td className="py-4 px-4 font-mono">
-                    <div className="font-bold text-stone-950">{chal.totalQuantity.toLocaleString()} Pcs</div>
+                    <div className="font-bold text-stone-950">{chal.totalQuantity?.toLocaleString()} Pcs</div>
                     <div className="text-[11px] text-stone-500">{chal.totalCartons} Cartons</div>
                   </td>
                   <td className="py-4 px-4">
@@ -189,12 +197,12 @@ export const DeliveryChallanManagement = ({ challans }) => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-stone-200 font-medium">
-                  {selectedChallan.items.map((item, idx) => (
+                  {selectedChallan.items?.map((item, idx) => (
                     <tr key={idx}>
                       <td className="p-2.5 font-mono font-bold text-stone-900">{item.itemCode}</td>
                       <td className="p-2.5 text-stone-700">{item.description}</td>
                       <td className="p-2.5 font-mono">{item.cartons} CTN</td>
-                      <td className="p-2.5 text-right font-mono font-bold text-stone-900">{item.quantity.toLocaleString()} Pcs</td>
+                      <td className="p-2.5 text-right font-mono font-bold text-stone-900">{item.quantity?.toLocaleString()} Pcs</td>
                     </tr>
                   ))}
                 </tbody>

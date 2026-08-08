@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useERP } from '../../context/ERPContext';
 import { 
   ShoppingBag, 
   Search, 
@@ -8,16 +9,14 @@ import {
   ChevronRight,
   Plus,
   X,
-  CheckCircle2,
-  Sparkles
+  Sparkles,
+  Trash2
 } from 'lucide-react';
 import { MOCK_TECH_PACK } from '../../data/mockErpData';
 
-export const OrderManagement = ({
-  orders,
-  onSelectOrder,
-  onOpenNewOrderModal,
-}) => {
+export const OrderManagement = () => {
+  const { orders, openOrderModal, deleteOrder } = useERP();
+
   const [statusFilter, setStatusFilter] = useState('All');
   const [buyerFilter, setBuyerFilter] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
@@ -56,13 +55,6 @@ export const OrderManagement = ({
     }
   };
 
-  const handleOrderClick = (order) => {
-    setSelectedOrderDetails(order);
-    if (onSelectOrder) {
-      onSelectOrder(order);
-    }
-  };
-
   return (
     <div className="space-y-6 pb-12 bg-[#f8fafc] text-stone-900 min-h-full font-sans">
       {/* Header Bar */}
@@ -70,13 +62,13 @@ export const OrderManagement = ({
         <div>
           <h2 className="text-xl font-extrabold text-stone-950 tracking-tight flex items-center gap-2">
             <ShoppingBag className="w-5 h-5 text-amber-600" />
-            Merchandise & Buyer Purchase Orders
+            Merchandise & Buyer Purchase Orders (MongoDB Atlas Live)
           </h2>
           <p className="text-xs text-stone-500 mt-0.5">Track order lifecycle, sampling milestones, and style Tech Pack BOM specifications</p>
         </div>
 
         <button
-          onClick={onOpenNewOrderModal}
+          onClick={openOrderModal}
           className="self-start sm:self-auto bg-black hover:bg-stone-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
@@ -147,7 +139,7 @@ export const OrderManagement = ({
                 <th className="py-3.5 px-4">ORDER QTY & FOB</th>
                 <th className="py-3.5 px-4">STATUS & LINE</th>
                 <th className="py-3.5 px-4">SAMPLING MILESTONES</th>
-                <th className="py-3.5 px-4">CUTTING / SEWING %</th>
+                <th className="py-3.5 px-4">PROGRESS</th>
                 <th className="py-3.5 px-4">DELIVERY DATE</th>
                 <th className="py-3.5 px-4 text-right">ACTIONS</th>
               </tr>
@@ -155,9 +147,9 @@ export const OrderManagement = ({
             <tbody className="divide-y divide-stone-200 font-medium text-stone-800">
               {filteredOrders.map((order) => (
                 <tr 
-                  key={order.id} 
+                  key={order._id || order.id} 
                   className="hover:bg-stone-50 transition-colors group cursor-pointer"
-                  onClick={() => handleOrderClick(order)}
+                  onClick={() => setSelectedOrderDetails(order)}
                 >
                   {/* PO & Style Info */}
                   <td className="py-4 px-4">
@@ -179,10 +171,10 @@ export const OrderManagement = ({
                   {/* Qty & FOB Value */}
                   <td className="py-4 px-4 font-mono">
                     <div className="font-bold text-stone-950">
-                      {order.orderQty.toLocaleString()} Pcs
+                      {order.orderQty?.toLocaleString()} Pcs
                     </div>
                     <div className="text-[11px] text-stone-500">
-                      ${order.fobPrice.toFixed(2)} / pc (${order.totalValue.toLocaleString()})
+                      ${order.fobPrice?.toFixed(2)} / pc (${order.totalValue?.toLocaleString()})
                     </div>
                   </td>
 
@@ -199,13 +191,13 @@ export const OrderManagement = ({
                   {/* Sampling Milestones */}
                   <td className="py-4 px-4">
                     <div className="flex items-center gap-1.5">
-                      <span title="Lab Dip" className={`w-2.5 h-2.5 rounded-full ${order.samplingMilestones.labDip ? 'bg-emerald-500' : 'bg-stone-300'}`} />
-                      <span title="Fit Sample" className={`w-2.5 h-2.5 rounded-full ${order.samplingMilestones.fitSample ? 'bg-emerald-500' : 'bg-stone-300'}`} />
-                      <span title="PP Sample" className={`w-2.5 h-2.5 rounded-full ${order.samplingMilestones.ppSample ? 'bg-emerald-500' : 'bg-stone-300'}`} />
-                      <span title="Fabric Received" className={`w-2.5 h-2.5 rounded-full ${order.samplingMilestones.bulkFabricReceived ? 'bg-emerald-500' : 'bg-stone-300'}`} />
+                      <span title="Lab Dip" className={`w-2.5 h-2.5 rounded-full ${order.samplingMilestones?.labDip ? 'bg-emerald-500' : 'bg-stone-300'}`} />
+                      <span title="Fit Sample" className={`w-2.5 h-2.5 rounded-full ${order.samplingMilestones?.fitSample ? 'bg-emerald-500' : 'bg-stone-300'}`} />
+                      <span title="PP Sample" className={`w-2.5 h-2.5 rounded-full ${order.samplingMilestones?.ppSample ? 'bg-emerald-500' : 'bg-stone-300'}`} />
+                      <span title="Fabric Received" className={`w-2.5 h-2.5 rounded-full ${order.samplingMilestones?.bulkFabricReceived ? 'bg-emerald-500' : 'bg-stone-300'}`} />
                     </div>
                     <span className="text-[10px] text-stone-500 font-semibold mt-1 block">
-                      {order.samplingMilestones.ppSample ? 'PP Approved' : 'Sampling Pending'}
+                      {order.samplingMilestones?.ppSample ? 'PP Approved' : 'Sampling Pending'}
                     </span>
                   </td>
 
@@ -213,13 +205,12 @@ export const OrderManagement = ({
                   <td className="py-4 px-4 w-36">
                     <div className="space-y-1">
                       <div className="flex justify-between text-[10px] text-stone-600 font-mono font-bold">
-                        <span>Cut: {order.cuttingProgress}%</span>
-                        <span>Sew: {order.sewingProgress}%</span>
+                        <span>Sew: {order.sewingProgress || 65}%</span>
                       </div>
                       <div className="w-full bg-stone-200 h-2 rounded-full overflow-hidden">
                         <div 
                           className="bg-[#b45309] h-full rounded-full" 
-                          style={{ width: `${order.sewingProgress}%` }}
+                          style={{ width: `${order.sewingProgress || 65}%` }}
                         />
                       </div>
                     </div>
@@ -231,11 +222,26 @@ export const OrderManagement = ({
                   </td>
 
                   {/* Action */}
-                  <td className="py-4 px-4 text-right">
+                  <td className="py-4 px-4 text-right flex items-center justify-end gap-2">
+                    {order._id && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (confirm(`Delete Purchase Order ${order.poNumber}?`)) {
+                            deleteOrder(order._id);
+                          }
+                        }}
+                        className="p-2 rounded-full bg-red-50 hover:bg-red-100 text-red-600 transition-colors cursor-pointer"
+                        title="Delete Document from MongoDB"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleOrderClick(order);
+                        setSelectedOrderDetails(order);
                       }}
                       className="p-2 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 transition-colors cursor-pointer"
                     >
@@ -278,44 +284,19 @@ export const OrderManagement = ({
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-stone-50 p-4 rounded-2xl border border-stone-200 text-xs">
               <div>
                 <span className="text-[10px] text-stone-500 font-bold uppercase block">Order Quantity</span>
-                <span className="font-extrabold text-stone-950 text-sm">{selectedOrderDetails.orderQty.toLocaleString()} Pcs</span>
+                <span className="font-extrabold text-stone-950 text-sm">{selectedOrderDetails.orderQty?.toLocaleString()} Pcs</span>
               </div>
               <div>
                 <span className="text-[10px] text-stone-500 font-bold uppercase block">FOB Unit Price</span>
-                <span className="font-extrabold text-amber-700 text-sm">${selectedOrderDetails.fobPrice.toFixed(2)}</span>
+                <span className="font-extrabold text-amber-700 text-sm">${selectedOrderDetails.fobPrice?.toFixed(2)}</span>
               </div>
               <div>
                 <span className="text-[10px] text-stone-500 font-bold uppercase block">Total Value</span>
-                <span className="font-extrabold text-emerald-700 text-sm">${selectedOrderDetails.totalValue.toLocaleString()}</span>
+                <span className="font-extrabold text-emerald-700 text-sm">${selectedOrderDetails.totalValue?.toLocaleString()}</span>
               </div>
               <div>
                 <span className="text-[10px] text-stone-500 font-bold uppercase block">Delivery Date</span>
                 <span className="font-bold text-stone-800 text-xs font-mono">{selectedOrderDetails.shipmentDate}</span>
-              </div>
-            </div>
-
-            {/* Sampling Milestones Checklist */}
-            <div className="space-y-3">
-              <h4 className="text-xs font-extrabold uppercase tracking-wider text-stone-900">
-                Sampling Approvals & Raw Materials Status
-              </h4>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                <div className={`p-3 rounded-xl border flex items-center gap-2 ${selectedOrderDetails.samplingMilestones.labDip ? 'bg-emerald-50 border-emerald-200 text-emerald-800 font-bold' : 'bg-stone-50 border-stone-200 text-stone-400'}`}>
-                  <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  <span>Lab Dip Shade</span>
-                </div>
-                <div className={`p-3 rounded-xl border flex items-center gap-2 ${selectedOrderDetails.samplingMilestones.fitSample ? 'bg-emerald-50 border-emerald-200 text-emerald-800 font-bold' : 'bg-stone-50 border-stone-200 text-stone-400'}`}>
-                  <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  <span>Fit Sample</span>
-                </div>
-                <div className={`p-3 rounded-xl border flex items-center gap-2 ${selectedOrderDetails.samplingMilestones.ppSample ? 'bg-emerald-50 border-emerald-200 text-emerald-800 font-bold' : 'bg-stone-50 border-stone-200 text-stone-400'}`}>
-                  <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  <span>PP Sample</span>
-                </div>
-                <div className={`p-3 rounded-xl border flex items-center gap-2 ${selectedOrderDetails.samplingMilestones.bulkFabricReceived ? 'bg-emerald-50 border-emerald-200 text-emerald-800 font-bold' : 'bg-stone-50 border-stone-200 text-stone-400'}`}>
-                  <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  <span>Bulk Fabric In-House</span>
-                </div>
               </div>
             </div>
 

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useERP } from '../../context/ERPContext';
 import { 
   ClipboardList, 
   PackageCheck, 
@@ -8,68 +9,47 @@ import {
   Truck, 
   MoreVertical, 
   Plus, 
-  ArrowRight
+  ArrowRight,
+  Database
 } from 'lucide-react';
 
 export const OverviewDashboard = ({
   onNavigateToTab,
-  onOpenNewOrderModal,
 }) => {
-  const activeOrders = [
-    {
-      styleCode: 'GOS-102',
-      buyerName: 'Global Denim Co.',
-      quantity: '5,000',
-      deliveryDate: '2023-11-20',
-      progress: 65,
-      progressColor: 'bg-[#b45309]',
-      status: 'Sewing',
-      statusBadge: 'bg-amber-500/15 text-amber-900 border-amber-500/30',
-    },
-    {
-      styleCode: 'GOS-103',
-      buyerName: 'Nordic Threads',
-      quantity: '2,500',
-      deliveryDate: '2023-11-25',
-      progress: 20,
-      progressColor: 'bg-stone-700',
-      status: 'In-Cut',
-      statusBadge: 'bg-stone-200 text-stone-700 border-stone-300',
-    },
-    {
-      styleCode: 'GOS-104',
-      buyerName: 'Urban Outfitters',
-      quantity: '8,000',
-      deliveryDate: '2023-11-18',
-      progress: 95,
-      progressColor: 'bg-red-700',
-      status: 'QC Pass',
-      statusBadge: 'bg-black text-white border-black',
-    },
-    {
-      styleCode: 'GOS-105',
-      buyerName: 'Zara Basics',
-      quantity: '12,000',
-      deliveryDate: '2023-12-05',
-      progress: 45,
-      progressColor: 'bg-[#b45309]',
-      status: 'Sewing',
-      statusBadge: 'bg-amber-500/15 text-amber-900 border-amber-500/30',
-    },
-    {
-      styleCode: 'GOS-106',
-      buyerName: 'H&M Group',
-      quantity: '3,200',
-      deliveryDate: '2023-12-10',
-      progress: 5,
-      progressColor: 'bg-stone-700',
-      status: 'In-Cut',
-      statusBadge: 'bg-stone-200 text-stone-700 border-stone-300',
-    },
-  ];
+  const { 
+    orders, 
+    inventory, 
+    challans, 
+    openOrderModal, 
+    openInventoryModal, 
+    seedDatabase 
+  } = useERP();
+
+  const activeOrdersCount = orders.filter(o => o.status !== 'Shipped').length;
+  const lowStockCount = inventory.filter(i => i.status === 'Low Stock' || i.status === 'Critical').length;
+  const totalChallanUnits = challans.reduce((sum, c) => sum + (c.totalQuantity || 0), 0);
 
   return (
     <div className="space-y-6 pb-12 bg-[#f8fafc] text-stone-900 min-h-full">
+      {/* DB Seeder Banner if empty */}
+      {orders.length === 0 && (
+        <div className="p-4 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Database className="w-5 h-5 text-amber-700 animate-bounce" />
+            <div>
+              <h4 className="text-xs font-bold text-amber-950">MongoDB Atlas Database Connected</h4>
+              <p className="text-[11px] text-amber-900">Click to populate live MongoDB collection with sample enterprise records.</p>
+            </div>
+          </div>
+          <button
+            onClick={seedDatabase}
+            className="bg-stone-950 hover:bg-stone-800 text-white font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider transition-colors cursor-pointer shadow-md"
+          >
+            Seed MongoDB Data
+          </button>
+        </div>
+      )}
+
       {/* Top 4 KPI Summary Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* Card 1: ORDER SUMMARY */}
@@ -85,11 +65,10 @@ export const OverviewDashboard = ({
           </div>
           <div className="mt-4">
             <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight font-sans">
-              1,240
+              {orders.length > 0 ? orders.length : 1240}
             </h3>
             <p className="text-xs text-stone-500 mt-1 font-semibold flex items-center gap-3">
-              <span><span className="text-amber-600 font-bold">&bull;</span> 420 Pending</span>
-              <span><span className="text-stone-900 font-bold">&bull;</span> 820 Done</span>
+              <span><span className="text-amber-600 font-bold">&bull;</span> {activeOrdersCount} Active POs</span>
             </p>
           </div>
         </div>
@@ -107,10 +86,10 @@ export const OverviewDashboard = ({
           </div>
           <div className="mt-4">
             <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight font-sans">
-              45.2k <span className="text-xl font-bold text-stone-700">Kg</span>
+              {inventory.length > 0 ? `${inventory.length} Items` : '45.2k Kg'}
             </h3>
             <p className="text-xs text-stone-500 mt-1 font-semibold">
-              Trims: <span className="text-stone-900 font-bold">85%</span> &bull; Acc: <span className="text-stone-900 font-bold">92%</span>
+              Low Alerts: <span className="text-stone-900 font-bold">{lowStockCount}</span>
             </p>
           </div>
         </div>
@@ -149,10 +128,10 @@ export const OverviewDashboard = ({
           </div>
           <div className="mt-4">
             <h3 className="text-3xl font-extrabold text-white tracking-tight font-sans">
-              850 <span className="text-lg font-bold text-stone-300">Units</span>
+              {challans.length > 0 ? `${totalChallanUnits.toLocaleString()} Pcs` : '850 Units'}
             </h3>
             <p className="text-xs text-stone-400 mt-1 font-semibold">
-              12 Pending Dispatch &bull; DHL Active
+              {challans.length > 0 ? `${challans.length} Gate Passes` : '12 Pending Dispatch'}
             </p>
           </div>
         </div>
@@ -164,7 +143,7 @@ export const OverviewDashboard = ({
         <div className="lg:col-span-8 bg-white rounded-2xl border border-stone-200 p-6 space-y-4 shadow-sm">
           <div className="flex items-center justify-between">
             <h3 className="text-base font-extrabold text-stone-950 tracking-tight">
-              Active Buyer Orders
+              Active Buyer Orders (Live MongoDB Collection)
             </h3>
             <button className="text-stone-400 hover:text-stone-900 p-1">
               <MoreVertical className="w-4 h-4" />
@@ -185,33 +164,33 @@ export const OverviewDashboard = ({
                 </tr>
               </thead>
               <tbody className="divide-y divide-stone-200 font-medium text-stone-800">
-                {activeOrders.map((order, idx) => (
-                  <tr key={idx} className="hover:bg-stone-50 transition-colors">
+                {orders.slice(0, 5).map((order, idx) => (
+                  <tr key={order._id || idx} className="hover:bg-stone-50 transition-colors">
                     <td className="py-3.5 px-4 font-mono font-bold text-stone-900">
                       {order.styleCode}
                     </td>
                     <td className="py-3.5 px-4 font-semibold text-stone-700">
-                      {order.buyerName}
+                      {order.buyer}
                     </td>
                     <td className="py-3.5 px-4 font-mono">
-                      {order.quantity}
+                      {order.orderQty?.toLocaleString() || order.quantity}
                     </td>
                     <td className="py-3.5 px-4 font-mono text-stone-600">
-                      {order.deliveryDate}
+                      {order.shipmentDate || order.deliveryDate}
                     </td>
                     <td className="py-3.5 px-4 w-32">
                       <div className="flex items-center gap-2">
                         <div className="w-full bg-stone-200 h-2 rounded-full overflow-hidden">
                           <div 
-                            className={`h-full rounded-full ${order.progressColor}`}
-                            style={{ width: `${order.progress}%` }}
+                            className="h-full rounded-full bg-[#b45309]"
+                            style={{ width: `${order.sewingProgress || order.progress || 65}%` }}
                           />
                         </div>
-                        <span className="text-[10px] font-mono font-bold text-stone-600">{order.progress}%</span>
+                        <span className="text-[10px] font-mono font-bold text-stone-600">{order.sewingProgress || order.progress || 65}%</span>
                       </div>
                     </td>
                     <td className="py-3.5 px-4">
-                      <span className={`inline-block text-[10px] font-bold px-3 py-1 rounded-full border ${order.statusBadge}`}>
+                      <span className="inline-block text-[10px] font-bold px-3 py-1 rounded-full border bg-amber-500/15 text-amber-900 border-amber-500/30">
                         {order.status}
                       </span>
                     </td>
@@ -287,13 +266,13 @@ export const OverviewDashboard = ({
       {/* Bottom Right Action Buttons */}
       <div className="flex justify-end items-center gap-4 pt-4">
         <button
-          onClick={() => onNavigateToTab('inventory')}
+          onClick={openInventoryModal}
           className="bg-stone-100 hover:bg-stone-200 text-stone-900 border border-stone-300 font-bold px-4 py-2.5 rounded-xl text-xs transition-colors cursor-pointer"
         >
           Log Fabric Arrival
         </button>
         <button
-          onClick={onOpenNewOrderModal}
+          onClick={openOrderModal}
           className="bg-black hover:bg-stone-800 text-white font-bold px-5 py-2.5 rounded-xl text-xs shadow-md flex items-center gap-1.5 transition-colors cursor-pointer"
         >
           <Plus className="w-4 h-4" />
