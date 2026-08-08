@@ -1,31 +1,34 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Image from "next/image";
-import {
-  Layers,
-  ArrowRight,
-  Play,
-  Box,
-  Factory,
-  Truck,
-  ShoppingBag,
-  TrendingUp,
-  User,
-  CheckCircle2,
-  X,
+import React, { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { 
+  Layers, 
+  ArrowRight, 
+  Play, 
+  Box, 
+  Factory, 
+  Truck, 
+  ShoppingBag, 
+  TrendingUp, 
+  User, 
+  CheckCircle2, 
+  X, 
   Sparkles,
-  ChevronRight,
-} from "lucide-react";
+  ChevronRight
+} from 'lucide-react';
 
-export const MarketingLandingPage = ({ onNavigateToErp }) => {
+export const MarketingLandingPage = () => {
+  const router = useRouter();
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    factoryName: "",
-    monthlyCapacity: "50,000 - 200,000 pcs",
+    name: '',
+    email: '',
+    factoryName: '',
+    monthlyCapacity: '50,000 - 200,000 pcs',
   });
 
   const handleDemoSubmit = (e) => {
@@ -51,13 +54,13 @@ export const MarketingLandingPage = ({ onNavigateToErp }) => {
               GarmentsOS IoT Line Integration now live for Garment Manufacturers
             </span>
           </div>
-          <button
-            onClick={() => onNavigateToErp("overview")}
+          <Link 
+            href="/dashboard"
             className="flex items-center gap-1 text-amber-400 hover:text-amber-300 font-medium transition-colors cursor-pointer"
           >
             <span>Launch Live ERP Sandbox</span>
             <ChevronRight className="w-3.5 h-3.5" />
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -65,8 +68,8 @@ export const MarketingLandingPage = ({ onNavigateToErp }) => {
       <header className="sticky top-0 z-40 bg-[#fafaf8]/90 backdrop-blur-md border-b border-stone-200/80 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo */}
-          <div
-            onClick={() => onNavigateToErp("landing")}
+          <Link 
+            href="/"
             className="flex items-center gap-2.5 cursor-pointer group"
           >
             <div className="w-8 h-8 rounded-lg bg-stone-900 text-white flex items-center justify-center font-bold shadow-sm group-hover:bg-amber-600 transition-colors">
@@ -75,17 +78,17 @@ export const MarketingLandingPage = ({ onNavigateToErp }) => {
             <span className="font-extrabold text-xl tracking-tight text-stone-900">
               GarmentsOS
             </span>
-          </div>
+          </Link>
 
           {/* Navigation Links */}
           <nav className="flex items-center gap-6 text-xs font-bold tracking-widest text-stone-600 uppercase">
-            <button
-              onClick={() => onNavigateToErp("overview")}
+            <Link
+              href="/dashboard"
               className="bg-[#b45309] hover:bg-[#92400e] text-white px-4 py-2 rounded-full font-extrabold text-xs tracking-wider uppercase transition-all cursor-pointer shadow-md flex items-center gap-1.5"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-200" />
               <span>ERP DASHBOARD</span>
-            </button>
+            </Link>
             <a
               href="#features"
               className="hidden md:inline-block hover:text-stone-900 transition-colors"
@@ -114,28 +117,28 @@ export const MarketingLandingPage = ({ onNavigateToErp }) => {
 
           {/* Header Action Buttons */}
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => onNavigateToErp("overview")}
+            <Link
+              href="/dashboard"
               className="flex items-center gap-1.5 text-xs font-bold text-white bg-stone-900 hover:bg-stone-800 border border-stone-700 px-4 py-2 rounded-full transition-all cursor-pointer shadow-sm"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
               <span>Launch Dashboard Layout</span>
-            </button>
+            </Link>
 
-            <button
-              onClick={() => onNavigateToErp("overview")}
+            <Link
+              href="/dashboard"
               className="hidden sm:inline-block bg-[#b45309] hover:bg-[#92400e] text-white px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition-all cursor-pointer shadow-sm"
             >
               ERP Dashboard
-            </button>
+            </Link>
 
-            <button
-              onClick={() => onNavigateToErp("overview")}
+            <Link
+              href="/dashboard"
               className="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-900 hover:bg-amber-500/30 transition-colors cursor-pointer"
               title="Go to Dashboard Layout"
             >
               <User className="w-4 h-4 text-amber-600" />
-            </button>
+            </Link>
           </div>
         </div>
       </header>
@@ -153,9 +156,9 @@ export const MarketingLandingPage = ({ onNavigateToErp }) => {
 
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-stone-950 tracking-tight leading-[1.1]">
-              The Operating System for{" "}
-              <span className="text-[#b45309] block sm:inline">Modern</span>{" "}
-              <span className="text-[#b45309] block sm:inline">Garment</span>{" "}
+              The Operating System for{' '}
+              <span className="text-[#b45309] block sm:inline">Modern</span>{' '}
+              <span className="text-[#b45309] block sm:inline">Garment</span>{' '}
               <span className="text-[#b45309] block">Manufacturing</span>
             </h1>
 
@@ -168,21 +171,21 @@ export const MarketingLandingPage = ({ onNavigateToErp }) => {
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap items-center gap-4 pt-2">
-              <button
-                onClick={() => onNavigateToErp("overview")}
+              <Link
+                href="/dashboard"
                 className="bg-[#b45309] hover:bg-[#92400e] text-white px-7 py-3.5 rounded-full text-xs font-bold tracking-wider uppercase flex items-center gap-2 transition-all shadow-md hover:shadow-lg cursor-pointer"
               >
                 <span>ENTER ERP DASHBOARD</span>
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </Link>
 
-              <button
-                onClick={() => onNavigateToErp("overview")}
+              <Link
+                href="/dashboard"
                 className="bg-stone-200/80 hover:bg-stone-300 text-stone-900 px-6 py-3.5 rounded-full text-xs font-bold tracking-wider uppercase flex items-center gap-2 transition-colors cursor-pointer"
               >
                 <Play className="w-3.5 h-3.5 text-stone-800 fill-stone-800" />
                 <span>Launch ERP Dashboard</span>
-              </button>
+              </Link>
             </div>
 
             {/* Trust Indicator */}
@@ -199,10 +202,10 @@ export const MarketingLandingPage = ({ onNavigateToErp }) => {
                 </div>
               </div>
               <p className="text-xs font-semibold text-stone-600">
-                Trusted by{" "}
+                Trusted by{' '}
                 <span className="text-stone-900 font-extrabold">
                   500+ factories
-                </span>{" "}
+                </span>{' '}
                 worldwide
               </p>
             </div>
@@ -262,7 +265,7 @@ export const MarketingLandingPage = ({ onNavigateToErp }) => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Module 1: Fabric & Trim Inventory */}
             <div
-              onClick={() => onNavigateToErp("inventory")}
+              onClick={() => router.push('/dashboard/inventory')}
               className="bg-white p-7 rounded-2xl border border-stone-200/90 shadow-sm hover:shadow-md hover:border-amber-500/40 transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-4">
@@ -285,7 +288,7 @@ export const MarketingLandingPage = ({ onNavigateToErp }) => {
 
             {/* Module 2: Production WIP */}
             <div
-              onClick={() => onNavigateToErp("production")}
+              onClick={() => router.push('/dashboard/production')}
               className="bg-white p-7 rounded-2xl border border-stone-200/90 shadow-sm hover:shadow-md hover:border-amber-500/40 transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-4">
@@ -308,7 +311,7 @@ export const MarketingLandingPage = ({ onNavigateToErp }) => {
 
             {/* Module 3: Delivery Challans */}
             <div
-              onClick={() => onNavigateToErp("logistics")}
+              onClick={() => router.push('/dashboard/logistics')}
               className="bg-white p-7 rounded-2xl border border-stone-200/90 shadow-sm hover:shadow-md hover:border-amber-500/40 transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-4">
@@ -334,7 +337,7 @@ export const MarketingLandingPage = ({ onNavigateToErp }) => {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {/* Module 4: Order Management System (Span 7) */}
             <div
-              onClick={() => onNavigateToErp("orders")}
+              onClick={() => router.push('/dashboard/orders')}
               className="md:col-span-7 bg-white p-7 rounded-2xl border border-stone-200/90 shadow-sm hover:shadow-md hover:border-amber-500/40 transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
@@ -375,7 +378,7 @@ export const MarketingLandingPage = ({ onNavigateToErp }) => {
 
             {/* Module 5: Analytics & Reports (Span 5) */}
             <div
-              onClick={() => onNavigateToErp("overview")}
+              onClick={() => router.push('/dashboard')}
               className="md:col-span-5 bg-white p-7 rounded-2xl border border-stone-200/90 shadow-sm hover:shadow-md hover:border-amber-500/40 transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-4">
@@ -415,18 +418,18 @@ export const MarketingLandingPage = ({ onNavigateToErp }) => {
           </p>
 
           <div className="flex flex-wrap justify-center items-center gap-4 pt-2">
-            <button
-              onClick={() => onNavigateToErp("overview")}
+            <Link
+              href="/dashboard"
               className="bg-[#b45309] hover:bg-[#92400e] text-white px-7 py-3.5 rounded-full text-xs font-bold tracking-wider uppercase transition-all shadow-lg hover:shadow-amber-900/30 cursor-pointer"
             >
               Open ERP Dashboard
-            </button>
-            <button
-              onClick={() => onNavigateToErp("overview")}
+            </Link>
+            <Link
+              href="/dashboard"
               className="border border-stone-700 bg-stone-900 hover:bg-stone-800 text-stone-200 px-7 py-3.5 rounded-full text-xs font-bold tracking-wider uppercase transition-colors cursor-pointer"
             >
               Launch Factory Dashboard
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -589,14 +592,14 @@ export const MarketingLandingPage = ({ onNavigateToErp }) => {
                     Request Received!
                   </h3>
                   <p className="text-xs text-stone-600 max-w-sm mx-auto">
-                    Thank you{" "}
+                    Thank you{' '}
                     <span className="font-bold text-stone-900">
                       {formData.name}
                     </span>
-                    . Our technical solution team for{" "}
+                    . Our technical solution team for{' '}
                     <span className="font-bold text-stone-900">
-                      {formData.factoryName || "your factory"}
-                    </span>{" "}
+                      {formData.factoryName || 'your factory'}
+                    </span>{' '}
                     will reach out within 2 hours.
                   </p>
                 </div>
@@ -605,7 +608,7 @@ export const MarketingLandingPage = ({ onNavigateToErp }) => {
                   <button
                     onClick={() => {
                       closeDemoModal();
-                      onNavigateToErp("overview");
+                      router.push('/dashboard');
                     }}
                     className="w-full bg-stone-950 hover:bg-stone-800 text-white py-3 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 transition-colors cursor-pointer"
                   >

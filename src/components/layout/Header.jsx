@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { 
   Search, 
   Bell, 
@@ -10,20 +12,29 @@ import {
 export const Header = ({
   searchQuery,
   setSearchQuery,
-  onNavigateToLanding,
 }) => {
+  const pathname = usePathname();
+
+  const getSubBreadcrumb = () => {
+    if (pathname.includes('/orders')) return 'ORDERS / STYLES';
+    if (pathname.includes('/inventory')) return 'FABRIC INVENTORY';
+    if (pathname.includes('/production')) return 'PRODUCTION WIP';
+    if (pathname.includes('/logistics')) return 'DELIVERY CHALLAN';
+    return 'DASHBOARD';
+  };
+
   return (
     <header className="bg-[#f8fafc] border-b border-stone-200/80 px-8 py-4 text-stone-900 flex items-center justify-between gap-4 sticky top-0 z-30">
       {/* Breadcrumb Navigation */}
       <div className="flex items-center gap-2 text-xs font-extrabold tracking-widest text-stone-400 uppercase">
-        <button 
-          onClick={onNavigateToLanding}
+        <Link 
+          href="/"
           className="hover:text-stone-900 transition-colors cursor-pointer"
         >
           GARMENTSOS
-        </button>
+        </Link>
         <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
-        <span className="text-stone-900">DASHBOARD</span>
+        <span className="text-stone-900">{getSubBreadcrumb()}</span>
       </div>
 
       {/* Center Search Bar */}

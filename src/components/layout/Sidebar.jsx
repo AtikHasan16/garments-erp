@@ -2,6 +2,8 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { 
   LayoutDashboard, 
   ShoppingBag, 
@@ -12,34 +14,38 @@ import {
   Layers
 } from 'lucide-react';
 
-export const Sidebar = ({
-  activeTab,
-  setActiveTab,
-}) => {
+export const Sidebar = () => {
+  const pathname = usePathname();
+
   const menuItems = [
     {
       id: 'overview',
       label: 'DASHBOARD',
+      href: '/dashboard',
       icon: LayoutDashboard,
     },
     {
       id: 'orders',
       label: 'ORDERS / STYLES',
+      href: '/dashboard/orders',
       icon: ShoppingBag,
     },
     {
       id: 'inventory',
       label: 'FABRIC INVENTORY',
+      href: '/dashboard/inventory',
       icon: Package,
     },
     {
       id: 'production',
       label: 'PRODUCTION WIP',
+      href: '/dashboard/production',
       icon: Factory,
     },
     {
       id: 'logistics',
       label: 'DELIVERY CHALLAN',
+      href: '/dashboard/logistics',
       icon: Truck,
     },
   ];
@@ -49,8 +55,8 @@ export const Sidebar = ({
       <div>
         {/* Brand Header */}
         <div className="p-6">
-          <div 
-            onClick={() => setActiveTab('landing')}
+          <Link 
+            href="/"
             className="flex items-center gap-2.5 cursor-pointer group"
           >
             <div className="w-7 h-7 rounded-md bg-stone-900 text-amber-500 flex items-center justify-center font-bold">
@@ -59,18 +65,18 @@ export const Sidebar = ({
             <h1 className="font-extrabold text-lg tracking-tight text-white flex items-center gap-1.5">
               GarmentsOS <span className="text-amber-500 text-xs uppercase font-bold tracking-wider">ERP</span>
             </h1>
-          </div>
+          </Link>
         </div>
 
         {/* Navigation Menu */}
         <nav className="px-4 space-y-2 mt-2">
           {menuItems.map((item) => {
             const Icon = item.icon;
-            const isActive = activeTab === item.id;
+            const isActive = pathname === item.href || (item.href === '/dashboard' && pathname === '/dashboard');
             return (
-              <button
+              <Link
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                href={item.href}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-extrabold tracking-wider transition-all cursor-pointer ${
                   isActive
                     ? 'bg-[#ea580c] text-white shadow-lg shadow-orange-950/40'
@@ -79,7 +85,7 @@ export const Sidebar = ({
               >
                 <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-stone-400'}`} />
                 <span>{item.label}</span>
-              </button>
+              </Link>
             );
           })}
         </nav>
@@ -96,13 +102,13 @@ export const Sidebar = ({
             <p className="text-[10px] text-stone-400">Factory Line A</p>
           </div>
         </div>
-        <button
-          onClick={() => setActiveTab('landing')}
+        <Link
+          href="/"
           className="p-1.5 rounded-lg text-stone-400 hover:text-white hover:bg-stone-800 transition-colors cursor-pointer"
           title="Exit to Public Landing Page"
         >
           <LogOut className="w-4 h-4" />
-        </button>
+        </Link>
       </div>
     </aside>
   );
