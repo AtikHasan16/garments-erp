@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { 
   Truck, 
   Printer,
-  Plus
+  Plus,
+  X
 } from 'lucide-react';
 
 export const DeliveryChallanManagement = ({ challans }) => {
@@ -13,82 +14,109 @@ export const DeliveryChallanManagement = ({ challans }) => {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'Out for Delivery':
-        return 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+        return 'bg-amber-500/15 text-amber-900 border-amber-500/30';
       case 'Delivered':
-        return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+        return 'bg-[#22c55e]/15 text-emerald-900 border-emerald-300';
       default:
-        return 'bg-stone-800 text-stone-400 border-stone-700';
+        return 'bg-stone-100 text-stone-600 border-stone-200';
     }
   };
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-12 bg-[#f8fafc] text-stone-900 min-h-full font-sans">
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-            <Truck className="w-5 h-5 text-amber-400" />
+          <h2 className="text-xl font-extrabold text-stone-950 tracking-tight flex items-center gap-2">
+            <Truck className="w-5 h-5 text-amber-600" />
             Delivery Challan & Factory Gate Pass Logistics Hub
           </h2>
-          <p className="text-xs text-slate-400">Generate outward gate passes, track delivery vehicles, and inspect carton packing lists</p>
+          <p className="text-xs text-stone-500 mt-0.5">Generate outward gate passes, track delivery vehicles, and inspect carton packing lists</p>
         </div>
 
-        <button className="self-start sm:self-auto bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg transition-all flex items-center gap-1.5 cursor-pointer">
+        <button className="self-start sm:self-auto bg-black hover:bg-stone-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer">
           <Plus className="w-4 h-4" />
           <span>Generate New Challan</span>
         </button>
       </div>
 
+      {/* Summary KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm flex flex-col justify-between">
+          <span className="text-[11px] font-extrabold text-stone-500 uppercase tracking-wider">ACTIVE GATE PASSES</span>
+          <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight mt-2">3 <span className="text-sm font-bold text-stone-500">Passes</span></h3>
+          <p className="text-xs text-stone-500 mt-1 font-semibold">Port ICD & Air Cargo</p>
+        </div>
+
+        <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm flex flex-col justify-between">
+          <span className="text-[11px] font-extrabold text-stone-500 uppercase tracking-wider">CARTONS DISPATCHED</span>
+          <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight mt-2">1,270 <span className="text-sm font-bold text-stone-500">Cartons</span></h3>
+          <p className="text-xs text-stone-500 mt-1 font-semibold">Export Grade Sealed</p>
+        </div>
+
+        <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm flex flex-col justify-between">
+          <span className="text-[11px] font-extrabold text-stone-500 uppercase tracking-wider">TOTAL SHIPMENT UNITS</span>
+          <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight mt-2">33,400 <span className="text-sm font-bold text-stone-500">Pcs</span></h3>
+          <p className="text-xs text-stone-500 mt-1 font-semibold">Levi&apos;s, ZARA & Tommy</p>
+        </div>
+
+        <div className="p-5 rounded-2xl bg-black text-white shadow-md flex flex-col justify-between">
+          <span className="text-[11px] font-extrabold text-stone-300 uppercase tracking-wider">LOGISTICS PARTNER</span>
+          <h3 className="text-3xl font-extrabold text-white tracking-tight mt-2">DHL & Port ICD</h3>
+          <p className="text-xs text-stone-400 mt-1 font-semibold">GPS Truck Fleet Active</p>
+        </div>
+      </div>
+
       {/* Challans List Table */}
-      <div className="rounded-2xl bg-stone-900 border border-stone-800 overflow-hidden shadow-xl">
+      <div className="rounded-2xl bg-white border border-stone-200 overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-stone-300">
-            <thead className="bg-stone-950 text-stone-400 uppercase font-semibold text-[11px] border-b border-stone-800">
+          <table className="w-full text-left text-xs font-sans">
+            <thead className="bg-black text-white uppercase text-[10px] font-bold tracking-wider">
               <tr>
-                <th className="py-3.5 px-4">Challan & Gate Pass</th>
-                <th className="py-3.5 px-4">Buyer & Style</th>
-                <th className="py-3.5 px-4">Cartons & Qty</th>
-                <th className="py-3.5 px-4">Vehicle & Driver</th>
-                <th className="py-3.5 px-4">Dispatch Date & Destination</th>
-                <th className="py-3.5 px-4">Status</th>
-                <th className="py-3.5 px-4 text-right">Print</th>
+                <th className="py-3.5 px-4">CHALLAN & GATE PASS</th>
+                <th className="py-3.5 px-4">BUYER & STYLE</th>
+                <th className="py-3.5 px-4">CARTONS & QTY</th>
+                <th className="py-3.5 px-4">VEHICLE & DRIVER</th>
+                <th className="py-3.5 px-4">DISPATCH DATE & DESTINATION</th>
+                <th className="py-3.5 px-4">STATUS</th>
+                <th className="py-3.5 px-4 text-right">PRINT</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-stone-800/60 font-medium">
+            <tbody className="divide-y divide-stone-200 font-medium text-stone-800">
               {challans.map((chal) => (
-                <tr key={chal.id} className="hover:bg-stone-800/40 transition-colors">
+                <tr key={chal.id} className="hover:bg-stone-50 transition-colors">
                   <td className="py-4 px-4 font-mono">
-                    <div className="font-bold text-amber-400">{chal.challanNo}</div>
-                    <div className="text-[11px] text-stone-400">Gate Pass: {chal.gatePassNo}</div>
+                    <div className="font-bold text-amber-700">{chal.challanNo}</div>
+                    <div className="text-[11px] text-stone-500">Gate Pass: {chal.gatePassNo}</div>
                   </td>
                   <td className="py-4 px-4">
-                    <div className="font-bold text-white">{chal.buyer}</div>
-                    <div className="text-[11px] text-stone-400 font-mono">{chal.poNumber} &bull; {chal.styleCode}</div>
+                    <div className="font-bold text-stone-950">{chal.buyer}</div>
+                    <div className="text-[11px] text-stone-500 font-mono">{chal.poNumber} &bull; {chal.styleCode}</div>
                   </td>
                   <td className="py-4 px-4 font-mono">
-                    <div className="font-bold text-white">{chal.totalQuantity.toLocaleString()} Pcs</div>
-                    <div className="text-[11px] text-stone-400">{chal.totalCartons} Cartons</div>
+                    <div className="font-bold text-stone-950">{chal.totalQuantity.toLocaleString()} Pcs</div>
+                    <div className="text-[11px] text-stone-500">{chal.totalCartons} Cartons</div>
                   </td>
                   <td className="py-4 px-4">
-                    <div className="font-bold text-stone-200">{chal.vehicleNo}</div>
-                    <div className="text-[11px] text-stone-400">{chal.driverName} ({chal.driverPhone})</div>
+                    <div className="font-bold text-stone-800">{chal.vehicleNo}</div>
+                    <div className="text-[11px] text-stone-500">{chal.driverName} ({chal.driverPhone})</div>
                   </td>
                   <td className="py-4 px-4">
-                    <div className="font-mono text-stone-200">{chal.dispatchDate}</div>
-                    <div className="text-[11px] text-stone-400 max-w-xs truncate">{chal.destination}</div>
+                    <div className="font-mono text-stone-800 font-bold">{chal.dispatchDate}</div>
+                    <div className="text-[11px] text-stone-500 max-w-xs truncate">{chal.destination}</div>
                   </td>
                   <td className="py-4 px-4">
-                    <span className={`inline-block text-[10px] font-bold px-2.5 py-1 rounded-full border ${getStatusBadge(chal.status)}`}>
+                    <span className={`inline-block text-[10px] font-bold px-3 py-1 rounded-full border ${getStatusBadge(chal.status)}`}>
                       {chal.status}
                     </span>
                   </td>
                   <td className="py-4 px-4 text-right">
                     <button
                       onClick={() => setSelectedChallan(chal)}
-                      className="p-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 transition-colors cursor-pointer"
+                      className="p-2 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-900 transition-colors cursor-pointer"
                       title="View Formal Gate Pass"
                     >
-                      <Printer className="w-4 h-4 text-amber-400" />
+                      <Printer className="w-4 h-4" />
                     </button>
                   </td>
                 </tr>
@@ -100,7 +128,7 @@ export const DeliveryChallanManagement = ({ challans }) => {
 
       {/* Formal Printable Delivery Challan Modal */}
       {selectedChallan && (
-        <div className="fixed inset-0 z-50 bg-stone-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-stone-950/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white text-stone-900 rounded-3xl max-w-2xl w-full p-8 shadow-2xl space-y-6 relative max-h-[90vh] overflow-y-auto font-sans">
             <div className="flex justify-between items-start border-b border-stone-200 pb-4">
               <div>
@@ -113,9 +141,9 @@ export const DeliveryChallanManagement = ({ challans }) => {
               </div>
               <button
                 onClick={() => setSelectedChallan(null)}
-                className="text-stone-400 hover:text-stone-900 text-sm font-bold"
+                className="p-2 rounded-full text-stone-400 hover:text-stone-900 hover:bg-stone-100 transition-colors"
               >
-                ✕
+                <X className="w-5 h-5" />
               </button>
             </div>
 
@@ -152,15 +180,15 @@ export const DeliveryChallanManagement = ({ challans }) => {
                 Carton Packing List Summary
               </h4>
               <table className="w-full text-left text-xs border border-stone-200 rounded-xl overflow-hidden">
-                <thead className="bg-stone-100 font-bold text-stone-700">
+                <thead className="bg-black text-white font-bold uppercase text-[10px]">
                   <tr>
-                    <th className="p-2.5">Item Code</th>
-                    <th className="p-2.5">Description</th>
-                    <th className="p-2.5">Cartons</th>
-                    <th className="p-2.5 text-right">Quantity</th>
+                    <th className="p-2.5">ITEM CODE</th>
+                    <th className="p-2.5">DESCRIPTION</th>
+                    <th className="p-2.5">CARTONS</th>
+                    <th className="p-2.5 text-right">QUANTITY</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-stone-200">
+                <tbody className="divide-y divide-stone-200 font-medium">
                   {selectedChallan.items.map((item, idx) => (
                     <tr key={idx}>
                       <td className="p-2.5 font-mono font-bold text-stone-900">{item.itemCode}</td>
@@ -176,9 +204,9 @@ export const DeliveryChallanManagement = ({ challans }) => {
             <div className="flex justify-end gap-3 pt-4 border-t border-stone-200">
               <button
                 onClick={() => setSelectedChallan(null)}
-                className="px-5 py-2 rounded-xl text-xs font-bold bg-stone-200 hover:bg-stone-300 text-stone-800 transition-colors"
+                className="px-5 py-2.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-stone-200 text-stone-800 transition-colors"
               >
-                Close Window
+                Close Document
               </button>
             </div>
           </div>

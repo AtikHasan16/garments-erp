@@ -2,307 +2,303 @@
 
 import React from 'react';
 import { 
-  ShoppingBag, 
-  Package, 
-  Factory, 
+  ClipboardList, 
+  PackageCheck, 
+  Cpu, 
   Truck, 
+  MoreVertical, 
   Plus, 
-  AlertTriangle, 
-  TrendingUp, 
-  Layers
+  ArrowRight
 } from 'lucide-react';
 
 export const OverviewDashboard = ({
-  orders,
-  lines,
-  inventory,
   onNavigateToTab,
   onOpenNewOrderModal,
 }) => {
-  const totalPcs = orders.reduce((sum, o) => sum + o.orderQty, 0);
-  const totalValue = orders.reduce((sum, o) => sum + o.totalValue, 0);
-  const activeOrdersCount = orders.filter(o => o.status !== 'Shipped').length;
-
-  const lowStockItems = inventory.filter(i => i.status === 'Low Stock' || i.status === 'Critical');
-  const bottleneckLines = lines.filter(l => l.status === 'Bottleneck');
-
-  const totalTargetOutput = lines.reduce((sum, l) => sum + l.targetOutput, 0);
-  const totalActualOutput = lines.reduce((sum, l) => sum + l.actualOutput, 0);
-  const overallEfficiency = totalTargetOutput > 0 ? ((totalActualOutput / totalTargetOutput) * 100).toFixed(1) : '0.0';
-
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case 'PP Approved':
-        return 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30';
-      case 'In Cutting':
-        return 'bg-purple-500/10 text-purple-400 border-purple-500/30';
-      case 'In Sewing':
-        return 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30';
-      case 'Finishing':
-        return 'bg-amber-500/10 text-amber-400 border-amber-500/30';
-      case 'Shipped':
-        return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
-      default:
-        return 'bg-[#292524] text-stone-400 border-stone-800';
-    }
-  };
+  const activeOrders = [
+    {
+      styleCode: 'GOS-102',
+      buyerName: 'Global Denim Co.',
+      quantity: '5,000',
+      deliveryDate: '2023-11-20',
+      progress: 65,
+      progressColor: 'bg-[#b45309]',
+      status: 'Sewing',
+      statusBadge: 'bg-amber-500/15 text-amber-900 border-amber-500/30',
+    },
+    {
+      styleCode: 'GOS-103',
+      buyerName: 'Nordic Threads',
+      quantity: '2,500',
+      deliveryDate: '2023-11-25',
+      progress: 20,
+      progressColor: 'bg-stone-700',
+      status: 'In-Cut',
+      statusBadge: 'bg-stone-200 text-stone-700 border-stone-300',
+    },
+    {
+      styleCode: 'GOS-104',
+      buyerName: 'Urban Outfitters',
+      quantity: '8,000',
+      deliveryDate: '2023-11-18',
+      progress: 95,
+      progressColor: 'bg-red-700',
+      status: 'QC Pass',
+      statusBadge: 'bg-black text-white border-black',
+    },
+    {
+      styleCode: 'GOS-105',
+      buyerName: 'Zara Basics',
+      quantity: '12,000',
+      deliveryDate: '2023-12-05',
+      progress: 45,
+      progressColor: 'bg-[#b45309]',
+      status: 'Sewing',
+      statusBadge: 'bg-amber-500/15 text-amber-900 border-amber-500/30',
+    },
+    {
+      styleCode: 'GOS-106',
+      buyerName: 'H&M Group',
+      quantity: '3,200',
+      deliveryDate: '2023-12-10',
+      progress: 5,
+      progressColor: 'bg-stone-700',
+      status: 'In-Cut',
+      statusBadge: 'bg-stone-200 text-stone-700 border-stone-300',
+    },
+  ];
 
   return (
-    <div className="space-y-6 pb-12">
-      {/* Top Banner / Header Title */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 text-xs text-amber-500 font-bold uppercase tracking-widest mb-1">
-            <Layers className="w-4 h-4" />
-            <span>GarmentsOS Dashboard</span>
-          </div>
-          <h2 className="text-2xl font-extrabold text-white tracking-tight">
-            Factory Production & Merchandise Overview
-          </h2>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => onNavigateToTab('orders')}
-            className="bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-semibold px-4 py-2.5 rounded-xl border border-stone-700 transition-colors cursor-pointer"
-          >
-            Manage Styles & POs
-          </button>
-          <button
-            onClick={onOpenNewOrderModal}
-            className="bg-[#b45309] hover:bg-[#92400e] text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg transition-all flex items-center gap-1.5 cursor-pointer"
-          >
-            <Plus className="w-4 h-4" />
-            <span>New Purchase Order</span>
-          </button>
-        </div>
-      </div>
-
-      {/* KPI Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Card 1: Orders */}
+    <div className="space-y-6 pb-12 bg-[#f8fafc] text-stone-900 min-h-full">
+      {/* Top 4 KPI Summary Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* Card 1: ORDER SUMMARY */}
         <div 
           onClick={() => onNavigateToTab('orders')}
-          className="p-5 rounded-2xl bg-stone-900 border border-stone-800 hover:border-amber-500/50 transition-all cursor-pointer group shadow-lg"
+          className="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
         >
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-[11px] font-bold text-stone-400 uppercase tracking-wider">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-extrabold text-stone-500 tracking-wider uppercase">
               ORDER SUMMARY
             </span>
-            <div className="p-2 rounded-xl bg-amber-500/10 text-amber-500 group-hover:scale-110 transition-transform">
-              <ShoppingBag className="w-5 h-5" />
-            </div>
+            <ClipboardList className="w-4 h-4 text-stone-400" />
           </div>
-          <div className="space-y-1">
-            <h3 className="text-2xl font-extrabold text-white font-mono">
-              {activeOrdersCount} <span className="text-xs font-normal text-stone-400">Active POs</span>
+          <div className="mt-4">
+            <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight font-sans">
+              1,240
             </h3>
-            <p className="text-xs text-stone-400 font-mono">
-              {totalPcs.toLocaleString()} Pcs &bull; ${totalValue.toLocaleString()}
+            <p className="text-xs text-stone-500 mt-1 font-semibold flex items-center gap-3">
+              <span><span className="text-amber-600 font-bold">&bull;</span> 420 Pending</span>
+              <span><span className="text-stone-900 font-bold">&bull;</span> 820 Done</span>
             </p>
           </div>
         </div>
 
-        {/* Card 2: Inventory */}
+        {/* Card 2: INVENTORY SUMMARY */}
         <div 
           onClick={() => onNavigateToTab('inventory')}
-          className="p-5 rounded-2xl bg-stone-900 border border-stone-800 hover:border-rose-500/50 transition-all cursor-pointer group shadow-lg"
+          className="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
         >
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-[11px] font-bold text-stone-400 uppercase tracking-wider">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-extrabold text-stone-500 tracking-wider uppercase">
               INVENTORY SUMMARY
             </span>
-            <div className="p-2 rounded-xl bg-rose-500/10 text-rose-400 group-hover:scale-110 transition-transform">
-              <Package className="w-5 h-5" />
-            </div>
+            <PackageCheck className="w-4 h-4 text-stone-400" />
           </div>
-          <div className="space-y-1">
-            <h3 className="text-2xl font-extrabold text-white font-mono flex items-center gap-2">
-              <span>{lowStockItems.length}</span>
-              <span className="text-xs font-normal text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-full border border-rose-500/30">
-                Low Alerts
-              </span>
+          <div className="mt-4">
+            <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight font-sans">
+              45.2k <span className="text-xl font-bold text-stone-700">Kg</span>
             </h3>
-            <p className="text-xs text-stone-400">
-              Fabric rolls, yarn & trims in-house
+            <p className="text-xs text-stone-500 mt-1 font-semibold">
+              Trims: <span className="text-stone-900 font-bold">85%</span> &bull; Acc: <span className="text-stone-900 font-bold">92%</span>
             </p>
           </div>
         </div>
 
-        {/* Card 3: Production WIP Efficiency */}
+        {/* Card 3: PRODUCTION SUMMARY */}
         <div 
           onClick={() => onNavigateToTab('production')}
-          className="p-5 rounded-2xl bg-stone-900 border border-stone-800 hover:border-emerald-500/50 transition-all cursor-pointer group shadow-lg"
+          className="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
         >
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-[11px] font-bold text-stone-400 uppercase tracking-wider">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-extrabold text-stone-500 tracking-wider uppercase">
               PRODUCTION SUMMARY
             </span>
-            <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 group-hover:scale-110 transition-transform">
-              <Factory className="w-5 h-5" />
-            </div>
+            <Cpu className="w-4 h-4 text-stone-400" />
           </div>
-          <div className="space-y-1">
-            <h3 className="text-2xl font-extrabold text-white font-mono">
-              {overallEfficiency}% <span className="text-xs font-normal text-emerald-400">Efficiency</span>
+          <div className="mt-4">
+            <h3 className="text-3xl font-extrabold text-stone-950 tracking-tight font-sans">
+              94.2%
             </h3>
-            <p className="text-xs text-stone-400 font-mono">
-              {totalActualOutput.toLocaleString()} / {totalTargetOutput.toLocaleString()} Pcs today
+            <p className="text-xs text-stone-500 mt-1 font-semibold">
+              3.4k U/hr &bull; 12.5k WIP
             </p>
           </div>
         </div>
 
-        {/* Card 4: Delivery Challans */}
+        {/* Card 4: DELIVERY SUMMARY (Black Card) */}
         <div 
           onClick={() => onNavigateToTab('logistics')}
-          className="p-5 rounded-2xl bg-stone-900 border border-stone-800 hover:border-amber-500/50 transition-all cursor-pointer group shadow-lg"
+          className="p-5 rounded-2xl bg-black text-white shadow-md hover:shadow-lg transition-all cursor-pointer flex flex-col justify-between"
         >
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-[11px] font-bold text-stone-400 uppercase tracking-wider">
+          <div className="flex items-center justify-between text-stone-400">
+            <span className="text-[11px] font-extrabold tracking-wider uppercase text-stone-300">
               DELIVERY SUMMARY
             </span>
-            <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400 group-hover:scale-110 transition-transform">
-              <Truck className="w-5 h-5" />
-            </div>
+            <Truck className="w-4 h-4 text-stone-300" />
           </div>
-          <div className="space-y-1">
-            <h3 className="text-2xl font-extrabold text-white font-mono">
-              3 <span className="text-xs font-normal text-stone-400">Active Gate Passes</span>
+          <div className="mt-4">
+            <h3 className="text-3xl font-extrabold text-white tracking-tight font-sans">
+              850 <span className="text-lg font-bold text-stone-300">Units</span>
             </h3>
-            <p className="text-xs text-stone-400">
-              23,400 Pcs dispatched this week
+            <p className="text-xs text-stone-400 mt-1 font-semibold">
+              12 Pending Dispatch &bull; DHL Active
             </p>
           </div>
         </div>
       </div>
 
-      {/* Main Grid: Active Buyer Orders Table & Line Efficiency Chart */}
+      {/* Middle Grid: Active Buyer Orders Table & Daily Output vs Target Chart */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column: Active Buyer Orders Table (Span 8) */}
-        <div className="lg:col-span-8 bg-stone-900 rounded-2xl border border-stone-800 p-5 space-y-4 shadow-xl">
+        {/* Left Column: Active Buyer Orders Card (Span 8) */}
+        <div className="lg:col-span-8 bg-white rounded-2xl border border-stone-200 p-6 space-y-4 shadow-sm">
           <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <ShoppingBag className="w-4 h-4 text-amber-500" />
-                Active Buyer Purchase Orders
-              </h3>
-              <p className="text-xs text-stone-400">Order fulfillment and sewing line progress</p>
-            </div>
-            <button 
-              onClick={() => onNavigateToTab('orders')}
-              className="text-xs font-bold text-amber-500 hover:underline cursor-pointer"
-            >
-              View All POs &rarr;
+            <h3 className="text-base font-extrabold text-stone-950 tracking-tight">
+              Active Buyer Orders
+            </h3>
+            <button className="text-stone-400 hover:text-stone-900 p-1">
+              <MoreVertical className="w-4 h-4" />
             </button>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-stone-300">
-              <thead className="bg-stone-950 text-stone-400 uppercase font-semibold text-[10px] border-b border-stone-800">
+          <div className="overflow-hidden rounded-xl border border-stone-200">
+            <table className="w-full text-left text-xs font-sans">
+              {/* Black Header Banner */}
+              <thead className="bg-black text-white uppercase text-[10px] font-bold tracking-wider">
                 <tr>
-                  <th className="py-3 px-3">Style & PO</th>
-                  <th className="py-3 px-3">Buyer</th>
-                  <th className="py-3 px-3">Order Qty</th>
-                  <th className="py-3 px-3">Status</th>
-                  <th className="py-3 px-3">Sewing %</th>
-                  <th className="py-3 px-3 text-right">Ship Date</th>
+                  <th className="py-3 px-4">STYLE CODE</th>
+                  <th className="py-3 px-4">BUYER NAME</th>
+                  <th className="py-3 px-4">QUANTITY</th>
+                  <th className="py-3 px-4">DELIVERY DATE</th>
+                  <th className="py-3 px-4">PROGRESS</th>
+                  <th className="py-3 px-4">STATUS</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-stone-800/80 font-medium">
-                {orders.slice(0, 5).map((o) => (
-                  <tr key={o.id} className="hover:bg-stone-800/40 transition-colors">
-                    <td className="py-3 px-3 font-semibold text-white">
-                      <div>{o.styleName}</div>
-                      <div className="text-[10px] text-amber-400 font-mono">{o.poNumber} &bull; {o.styleCode}</div>
+              <tbody className="divide-y divide-stone-200 font-medium text-stone-800">
+                {activeOrders.map((order, idx) => (
+                  <tr key={idx} className="hover:bg-stone-50 transition-colors">
+                    <td className="py-3.5 px-4 font-mono font-bold text-stone-900">
+                      {order.styleCode}
                     </td>
-                    <td className="py-3 px-3 text-stone-300">{o.buyer}</td>
-                    <td className="py-3 px-3 font-mono font-bold text-white">{o.orderQty.toLocaleString()} Pcs</td>
-                    <td className="py-3 px-3">
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${getStatusBadge(o.status)}`}>
-                        {o.status}
+                    <td className="py-3.5 px-4 font-semibold text-stone-700">
+                      {order.buyerName}
+                    </td>
+                    <td className="py-3.5 px-4 font-mono">
+                      {order.quantity}
+                    </td>
+                    <td className="py-3.5 px-4 font-mono text-stone-600">
+                      {order.deliveryDate}
+                    </td>
+                    <td className="py-3.5 px-4 w-32">
+                      <div className="flex items-center gap-2">
+                        <div className="w-full bg-stone-200 h-2 rounded-full overflow-hidden">
+                          <div 
+                            className={`h-full rounded-full ${order.progressColor}`}
+                            style={{ width: `${order.progress}%` }}
+                          />
+                        </div>
+                        <span className="text-[10px] font-mono font-bold text-stone-600">{order.progress}%</span>
+                      </div>
+                    </td>
+                    <td className="py-3.5 px-4">
+                      <span className={`inline-block text-[10px] font-bold px-3 py-1 rounded-full border ${order.statusBadge}`}>
+                        {order.status}
                       </span>
                     </td>
-                    <td className="py-3 px-3 w-32">
-                      <div className="flex justify-between text-[10px] text-stone-400 mb-1">
-                        <span>{o.sewingProgress}%</span>
-                      </div>
-                      <div className="w-full bg-stone-800 h-1.5 rounded-full overflow-hidden">
-                        <div 
-                          className="bg-amber-600 h-full rounded-full" 
-                          style={{ width: `${o.sewingProgress}%` }}
-                        />
-                      </div>
-                    </td>
-                    <td className="py-3 px-3 text-right font-mono text-stone-300">{o.shipmentDate}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+
+          <div className="pt-2 text-right">
+            <button 
+              onClick={() => onNavigateToTab('orders')}
+              className="text-xs font-bold text-stone-900 hover:text-amber-700 inline-flex items-center gap-1 cursor-pointer"
+            >
+              <span>View All Orders</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
 
-        {/* Right Column: Factory Line Output & Bottlenecks (Span 4) */}
-        <div className="lg:col-span-4 space-y-6">
-          {/* Bottleneck Alert Callout if any line has issues */}
-          {bottleneckLines.length > 0 && (
-            <div className="p-4 rounded-2xl bg-amber-950/40 border border-amber-500/40 text-amber-200 space-y-2 shadow-lg">
-              <div className="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-wider">
-                <AlertTriangle className="w-4 h-4 text-amber-500 animate-pulse" />
-                <span>Line Bottleneck Alert</span>
+        {/* Right Column: Daily Output vs Target Chart Card (Span 4) */}
+        <div className="lg:col-span-4 bg-white rounded-2xl border border-stone-200 p-6 space-y-6 shadow-sm flex flex-col justify-between">
+          <div>
+            <h3 className="text-base font-extrabold text-stone-950 tracking-tight mb-6">
+              Daily Output vs Target
+            </h3>
+
+            {/* Custom Dual Bar Chart Visualization */}
+            <div className="h-56 flex items-end justify-around border-b border-stone-200 pb-4 px-2">
+              {/* LINE A */}
+              <div className="flex flex-col items-center gap-2">
+                <div className="flex items-end gap-1.5 h-44">
+                  <div className="w-7 bg-stone-200 h-[85%] rounded-t-sm" title="Target" />
+                  <div className="w-7 bg-[#b45309] h-[75%] rounded-t-sm" title="Actual" />
+                </div>
+                <span className="text-[10px] font-bold text-stone-600 uppercase tracking-wider">LINE A</span>
               </div>
-              {bottleneckLines.map((line) => (
-                <div key={line.id} className="text-xs space-y-1 bg-stone-950/60 p-3 rounded-xl border border-amber-500/20">
-                  <div className="flex justify-between font-bold text-white">
-                    <span>{line.lineName}</span>
-                    <span className="text-amber-400 font-mono">{line.efficiencyPercent}% Eff</span>
-                  </div>
-                  <p className="text-[11px] text-stone-300">{line.bottleneckReason}</p>
-                </div>
-              ))}
-            </div>
-          )}
 
-          {/* Line Efficiency Status */}
-          <div className="bg-stone-900 rounded-2xl border border-stone-800 p-5 space-y-4 shadow-xl">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-emerald-400" />
-                Daily Line Output vs Target
-              </h3>
-              <button 
-                onClick={() => onNavigateToTab('production')}
-                className="text-xs font-bold text-amber-500 hover:underline cursor-pointer"
-              >
-                Line WIP &rarr;
-              </button>
+              {/* LINE B */}
+              <div className="flex flex-col items-center gap-2">
+                <div className="flex items-end gap-1.5 h-44">
+                  <div className="w-7 bg-stone-200 h-[70%] rounded-t-sm" title="Target" />
+                  <div className="w-7 bg-black h-[72%] rounded-t-sm" title="Actual" />
+                </div>
+                <span className="text-[10px] font-bold text-stone-600 uppercase tracking-wider">LINE B</span>
+              </div>
+
+              {/* LINE C */}
+              <div className="flex flex-col items-center gap-2">
+                <div className="flex items-end gap-1.5 h-44">
+                  <div className="w-7 bg-stone-200 h-[80%] rounded-t-sm" title="Target" />
+                  <div className="w-7 bg-[#b45309] h-[60%] rounded-t-sm" title="Actual" />
+                </div>
+                <span className="text-[10px] font-bold text-stone-600 uppercase tracking-wider">LINE C</span>
+              </div>
             </div>
 
-            <div className="space-y-3">
-              {lines.map((line) => (
-                <div key={line.id} className="space-y-1.5 text-xs">
-                  <div className="flex justify-between text-stone-300 font-medium">
-                    <span>{line.lineName}</span>
-                    <span className="font-bold font-mono text-white">
-                      {line.actualOutput} / {line.targetOutput} pcs ({line.efficiencyPercent}%)
-                    </span>
-                  </div>
-                  <div className="w-full bg-stone-800 h-2 rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full rounded-full transition-all ${
-                        line.efficiencyPercent >= 90 
-                          ? 'bg-emerald-500' 
-                          : line.efficiencyPercent >= 80 
-                          ? 'bg-amber-500' 
-                          : 'bg-rose-500'
-                      }`}
-                      style={{ width: `${Math.min(line.efficiencyPercent, 100)}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
+            {/* Chart Legend */}
+            <div className="flex items-center justify-center gap-6 text-xs text-stone-600 font-semibold pt-4">
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 bg-stone-200 rounded-xs inline-block" />
+                <span>Target</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 bg-[#b45309] rounded-xs inline-block" />
+                <span>Actual</span>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Bottom Right Action Buttons */}
+      <div className="flex justify-end items-center gap-4 pt-4">
+        <button
+          onClick={() => onNavigateToTab('inventory')}
+          className="bg-stone-100 hover:bg-stone-200 text-stone-900 border border-stone-300 font-bold px-4 py-2.5 rounded-xl text-xs transition-colors cursor-pointer"
+        >
+          Log Fabric Arrival
+        </button>
+        <button
+          onClick={onOpenNewOrderModal}
+          className="bg-black hover:bg-stone-800 text-white font-bold px-5 py-2.5 rounded-xl text-xs shadow-md flex items-center gap-1.5 transition-colors cursor-pointer"
+        >
+          <Plus className="w-4 h-4" />
+          <span>New Buyer Order</span>
+        </button>
       </div>
     </div>
   );
